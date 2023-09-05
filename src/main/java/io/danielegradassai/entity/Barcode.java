@@ -1,13 +1,8 @@
 package io.danielegradassai.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -29,4 +24,9 @@ public class Barcode implements Serializable {
     @Column(name = "IDTIPOART")
     private String idTipoArt;
 
+    @ManyToOne
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "CODART", referencedColumnName = "codArt")
+    @JsonBackReference
+    private Articoli articolo;
 }
