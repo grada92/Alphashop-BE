@@ -2,10 +2,7 @@ package io.danielegradassai.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,8 +13,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "IVA")
-public class Iva {
-
+@Data
+public class Iva
+{
     @Id
     @Column(name = "IDIVA")
     private int idIva;
@@ -31,5 +29,4 @@ public class Iva {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "iva")
     @JsonBackReference
     private Set<Articoli> articoli = new HashSet<>();
-
 }

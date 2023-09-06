@@ -1,10 +1,8 @@
 package io.danielegradassai.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,17 +13,18 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "famassort")
-public class FamAssort {
-
+@Data
+public class FamAssort
+{
     @Id
     @Column(name = "ID")
     private int id;
 
-    @Id
     @Column(name = "DESCRIZIONE")
     private String descrizione;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "famAssort")
+    @JsonBackReference
     private Set<Articoli> articoli = new HashSet<>();
 
 }

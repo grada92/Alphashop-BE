@@ -17,7 +17,7 @@ public class BarcodeServiceImpl implements BarcodeService {
     @Override
     public Barcode SelByBarcode(String Barcode) {
 
-        Barcode barcode = barcodeRepository.findByBarCode(Barcode);
+        Barcode barcode = barcodeRepository.findByBarcode(Barcode);
         if(Barcode != null) {
             Articoli articolo = barcode.getArticolo();
             articolo.setUm(articolo.getUm().trim());

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/articoli")
@@ -57,5 +59,25 @@ public class ArticoliController {
             throw new NotFoundException(ErrMsg);
         }
         return new ResponseEntity<ArticoliDto>(articolo, HttpStatus.OK);
+    }
+    @GetMapping(value = "/cerca/descrizione/{filter}", produces = "application/json")
+    public ResponseEntity<List<ArticoliDto>> listArtByDesc(@PathVariable("filter") String Filter)
+            throws NotFoundException
+    {
+        logger.info("****** Otteniamo gli articoli con Descrizione: " + Filter + " *******");
+
+        List<ArticoliDto> articoli = articoliService.SelByDescrizione(Filter.toUpperCase() + "%");
+
+        if (articoli == null)
+        {
+            String ErrMsg = String.format("Non è stato trovato alcun articolo avente descrizione %s", Filter);
+
+            logger.warn(ErrMsg);
+
+            throw new NotFoundException(ErrMsg);
+
+        }
+
+        return new ResponseEntity<List<ArticoliDto>>(articoli, HttpStatus.OK);
     }
 }

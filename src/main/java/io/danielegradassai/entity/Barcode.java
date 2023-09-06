@@ -12,15 +12,15 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "BARCODE")
-public class Barcode implements Serializable {
-
+@Data
+public class Barcode implements Serializable
+{
     private static final long serialVersionUID = 1853763261962860635L;
 
     @Id
     @Column(name = "BARCODE")
     private String barcode;
 
-    @Id
     @Column(name = "IDTIPOART")
     private String idTipoArt;
 
@@ -29,4 +29,5 @@ public class Barcode implements Serializable {
     @JoinColumn(name = "CODART", referencedColumnName = "codArt")
     @JsonBackReference
     private Articoli articolo;
+
 }

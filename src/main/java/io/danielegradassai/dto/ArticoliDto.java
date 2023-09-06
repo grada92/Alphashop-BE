@@ -22,6 +22,7 @@ public class ArticoliDto {
     private String idStatoArt;
     private Date dataCreaz;
     private double prezzo = 0;
+
     private Set<Barcode> barcode = new HashSet<>();
     private Ingredienti ingredienti;
     private FamAssort famAssort;
