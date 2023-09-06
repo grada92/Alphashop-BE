@@ -20,11 +20,11 @@ public class ArticoliDto {
     private Integer pzCart;
     private double pesoNetto;
     private String idStatoArt;
-    private Date dataCreazione;
+    private Date dataCreaz;
     private double prezzo = 0;
 
-    private Set<Barcode> barcode = new HashSet<>();
-    private Ingredienti ingredienti;
-    private FamAssort famAssort;
-    private Iva iva;
+    private Set<BarcodeDto> barcode = new HashSet<>();
+    private IngredientiDto ingredientiDto;
+    private CategoriaDto famAssort;
+    private IvaDto iva;
 }

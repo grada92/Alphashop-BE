@@ -1,5 +1,6 @@
 package io.danielegradassai.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable; // Import corretto per Pageable
 
 import io.danielegradassai.dto.ArticoliDto;
@@ -17,10 +18,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
-public class ArticoliServiceImpl implements ArticoliService {
+public class ArticoliServiceImpl implements ArticoliService
+{
+    @Autowired
+    ArticoliRepository articoliRepository;
 
-    private final ArticoliRepository articoliRepository;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public Iterable<Articoli> SelTutti()
     {
@@ -40,36 +45,47 @@ public class ArticoliServiceImpl implements ArticoliService {
 
         articoli.forEach(e -> e.setIdStatoArt(e.getIdStatoArt().trim()));
         articoli.forEach(e -> e.setUm(e.getUm().trim()));
+        articoli.forEach(e -> e.setDescrizione(e.getDescrizione().trim()));
 
-        List<ArticoliDto> val = articoli
+        List<ArticoliDto> retVal = articoli
                 .stream()
                 .map(source -> modelMapper.map(source, ArticoliDto.class))
                 .collect(Collectors.toList());
 
-        return val;
+        return retVal;
     }
 
-    @Override
-    public ArticoliDto SelByCodArt(String codArt)
+    private ArticoliDto ConvertToDto(Articoli articoli)
     {
-        Articoli articoli = articoliRepository.findByCodArt(codArt);
-        return this.ConvertToDto(articoli);
-    }
-
-    private ArticoliDto ConvertToDto(Articoli articoli){
         ArticoliDto articoliDto = null;
+
+
         if (articoli != null)
         {
             articoliDto =  modelMapper.map(articoli, ArticoliDto.class);
 
             articoliDto.setUm(articoliDto.getUm().trim());
             articoliDto.setIdStatoArt(articoliDto.getIdStatoArt().trim());
+            articoliDto.setDescrizione(articoliDto.getDescrizione().trim());
         }
+
         return articoliDto;
     }
+
     @Override
-    public ArticoliDto SelByBarcode(String barcode) {
+    public ArticoliDto SelByBarcode(String barcode)
+    {
         Articoli articoli = articoliRepository.SelByEan(barcode);
+
+        return this.ConvertToDto(articoli);
+
+    }
+
+    @Override
+    public ArticoliDto SelByCodArt(String codArt)
+    {
+        Articoli articoli = articoliRepository.findByCodArt(codArt);
+
         return this.ConvertToDto(articoli);
     }
 

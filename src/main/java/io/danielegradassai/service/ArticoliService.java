@@ -11,11 +11,12 @@ public interface ArticoliService {
 
     public Iterable<Articoli> SelTutti();
 
-    public List<ArticoliDto> SelByDescrizione(String descrizione);
 
     public List<Articoli> SelByDescrizione(String descrizione, Pageable pageable);
 
     public ArticoliDto SelByCodArt(String codArt);
+
+    List<ArticoliDto> SelByDescrizione(String descrizione);
 
     public ArticoliDto SelByBarcode(String barcode);
 

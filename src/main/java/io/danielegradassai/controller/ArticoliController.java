@@ -1,12 +1,8 @@
 package io.danielegradassai.controller;
 
 import io.danielegradassai.dto.ArticoliDto;
-import io.danielegradassai.entity.Articoli;
-import io.danielegradassai.entity.Barcode;
 import io.danielegradassai.exception.NotFoundException;
-import io.danielegradassai.repository.ArticoliRepository;
 import io.danielegradassai.service.ArticoliService;
-import io.danielegradassai.service.BarcodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
@@ -27,21 +23,27 @@ public class ArticoliController {
     private static final Logger logger = LoggerFactory.getLogger(ArticoliController.class);
 
     private final ArticoliService articoliService;
-    private final BarcodeService barcodeService;
     @GetMapping(value = "/cerca/ean/{barcode}", produces = "application/json")
-    public ResponseEntity<ArticoliDto> listArtByEan(@PathVariable("barcode") String Barcode) throws NotFoundException {
-       logger.info("****** Otteniamo l'articolo con barcode " + Barcode + "******");
+    public ResponseEntity<ArticoliDto> listArtByEan(@PathVariable("barcode") String Barcode)
+            throws NotFoundException
+    {
+        log.info("****** Otteniamo l'articolo con barcode " + Barcode + " *******");
 
-       ArticoliDto articolo = articoliService.SelByBarcode(Barcode);
+        ArticoliDto articolo = articoliService.SelByBarcode(Barcode);
 
-       if(articolo == null) {
-           String ErrMsg = String.format("Il barcode non è stato trovato", Barcode);
-           logger.warn(ErrMsg);
-           throw new NotFoundException(ErrMsg);
-          // return new ResponseEntity<Articoli>(HttpStatus.NOT_FOUND);
-       }
+        if (articolo == null)
+        {
+            String ErrMsg = String.format("Il barcode %s non è stato trovato!", Barcode);
 
-       return new ResponseEntity<ArticoliDto>(articolo, HttpStatus.OK);
+            log.warning(ErrMsg);
+
+            throw new NotFoundException(ErrMsg);
+
+            //return new ResponseEntity<Articoli>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<ArticoliDto>(articolo, HttpStatus.OK);
+
     }
 
     @GetMapping(value = "/cerca/codice/{codart}",produces = "application/json")
@@ -61,7 +63,7 @@ public class ArticoliController {
     public ResponseEntity<List<ArticoliDto>> listArtByDesc(@PathVariable("filter") String Filter)
             throws NotFoundException
     {
-        logger.info("****** Otteniamo gli articoli con Descrizione: " + Filter + " *******");
+        log.info("****** Otteniamo gli articoli con Descrizione: " + Filter + " *******");
 
         List<ArticoliDto> articoli = articoliService.SelByDescrizione(Filter.toUpperCase() + "%");
 
@@ -69,7 +71,7 @@ public class ArticoliController {
         {
             String ErrMsg = String.format("Non è stato trovato alcun articolo avente descrizione %s", Filter);
 
-            logger.warn(ErrMsg);
+            log.warning(ErrMsg);
 
             throw new NotFoundException(ErrMsg);
 
