@@ -40,11 +40,11 @@ public class Articoli implements Serializable {
 
     @Id
     @Column(name = "PZCART")
-    private String pzCart;
+    private Integer pzCart;
 
     @Id
     @Column(name = "PESONETTO")
-    private String pesoNetto;
+    private double pesoNetto;
 
     @Id
     @Column(name = "IDSTATOART")

@@ -1,5 +1,6 @@
 package io.danielegradassai.controller;
 
+import io.danielegradassai.dto.ArticoliDto;
 import io.danielegradassai.entity.Articoli;
 import io.danielegradassai.entity.Barcode;
 import io.danielegradassai.exception.NotFoundException;
@@ -42,5 +43,19 @@ public class ArticoliController {
            articolo = Ean.getArticolo();
        }
        return new ResponseEntity<Articoli>(articolo, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/cerca/codice/{codart}",produces = "application/json")
+    public ResponseEntity<ArticoliDto> listArtByCodArt(@PathVariable("codart") String CodArt) throws NotFoundException{
+        logger.info("****** Otteniamo l'articolo con codice + ", CodArt);
+
+        ArticoliDto articolo = articoliService.SelByCodArt(CodArt);
+
+        if(articolo == null){
+            String ErrMsg = String.format("L'articolo non è stato trovato", CodArt);
+            logger.warn(ErrMsg);
+            throw new NotFoundException(ErrMsg);
+        }
+        return new ResponseEntity<ArticoliDto>(articolo, HttpStatus.OK);
     }
 }
