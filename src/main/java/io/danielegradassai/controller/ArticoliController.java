@@ -2,6 +2,7 @@ package io.danielegradassai.controller;
 
 import io.danielegradassai.entity.Articoli;
 import io.danielegradassai.entity.Barcode;
+import io.danielegradassai.exception.NotFoundException;
 import io.danielegradassai.repository.ArticoliRepository;
 import io.danielegradassai.service.ArticoliService;
 import io.danielegradassai.service.BarcodeService;
@@ -25,7 +26,7 @@ public class ArticoliController {
     private final ArticoliService articoliService;
     private final BarcodeService barcodeService;
     @GetMapping(value = "/cerca/ean/{barcode}", produces = "application/json")
-    public ResponseEntity<Articoli> listArtByEan(@PathVariable("barcode") String Barcode){
+    public ResponseEntity<Articoli> listArtByEan(@PathVariable("barcode") String Barcode) throws NotFoundException {
        logger.info("****** Otteniamo l'articolo con barcode " + Barcode + "******");
 
        Articoli articolo;
@@ -34,7 +35,8 @@ public class ArticoliController {
        if(Ean == null) {
            String ErrMsg = String.format("Il barcode non è stato trovato", Barcode);
            logger.warn(ErrMsg);
-           return new ResponseEntity<Articoli>(HttpStatus.NOT_FOUND);
+           throw new NotFoundException(ErrMsg);
+          // return new ResponseEntity<Articoli>(HttpStatus.NOT_FOUND);
        }
        else {
            articolo = Ean.getArticolo();

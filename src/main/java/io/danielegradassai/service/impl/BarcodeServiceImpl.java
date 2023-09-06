@@ -18,10 +18,13 @@ public class BarcodeServiceImpl implements BarcodeService {
     public Barcode SelByBarcode(String Barcode) {
 
         Barcode barcode = barcodeRepository.findByBarCode(Barcode);
-        Articoli articolo = barcode.getArticolo();
-        articolo.setUm(articolo.getUm().trim());
-        articolo.setIdStatoArt(articolo.getIdStatoArt().trim());
-        barcode.setArticolo(articolo);
+        if(Barcode != null) {
+            Articoli articolo = barcode.getArticolo();
+            articolo.setUm(articolo.getUm().trim());
+            articolo.setIdStatoArt(articolo.getIdStatoArt().trim());
+
+            barcode.setArticolo(articolo);
+        }
         return barcode;
     }
 }
