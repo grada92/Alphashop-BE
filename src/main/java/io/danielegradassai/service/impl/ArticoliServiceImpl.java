@@ -53,8 +53,11 @@ public class ArticoliServiceImpl implements ArticoliService {
     public ArticoliDto SelByCodArt(String codArt)
     {
         Articoli articoli = articoliRepository.findByCodArt(codArt);
-        ArticoliDto articoliDto = null;
+        return this.ConvertToDto(articoli);
+    }
 
+    private ArticoliDto ConvertToDto(Articoli articoli){
+        ArticoliDto articoliDto = null;
         if (articoli != null)
         {
             articoliDto =  modelMapper.map(articoli, ArticoliDto.class);
@@ -62,8 +65,12 @@ public class ArticoliServiceImpl implements ArticoliService {
             articoliDto.setUm(articoliDto.getUm().trim());
             articoliDto.setIdStatoArt(articoliDto.getIdStatoArt().trim());
         }
-
         return articoliDto;
+    }
+    @Override
+    public ArticoliDto SelByBarcode(String barcode) {
+        Articoli articoli = articoliRepository.SelByEan(barcode);
+        return this.ConvertToDto(articoli);
     }
 
     @Override

@@ -17,8 +17,12 @@ public interface ArticoliService {
 
     public ArticoliDto SelByCodArt(String codArt);
 
+    public ArticoliDto SelByBarcode(String barcode);
+
     public void DelArticolo(Articoli articolo);
 
     public void InsArticolo(Articoli articolo);
+
+
 
 }

@@ -17,4 +17,6 @@ public interface ArticoliRepository  extends JpaRepository<Articoli, String>
     List<Articoli> findByDescrizioneLike(String descrizione, Pageable pageable);
 
     Articoli findByCodArt(String codArt);
+    @Query(value = "SELECT a FROM Articoli a JOIN a.barcode b WHERE b.barcode IN (:ean)")
+    Articoli SelByEan(@Param("ean") String ean);
 }
