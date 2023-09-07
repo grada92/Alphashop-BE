@@ -1,12 +1,14 @@
 package io.danielegradassai.controller;
 
 import io.danielegradassai.dto.ArticoliDto;
+import io.danielegradassai.entity.Articoli;
 import io.danielegradassai.exception.NotFoundException;
 import io.danielegradassai.service.ArticoliService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,17 +25,17 @@ public class ArticoliController {
     private static final Logger logger = LoggerFactory.getLogger(ArticoliController.class);
 
     private final ArticoliService articoliService;
-    @GetMapping(value = "/cerca/ean/{barcode}", produces = "application/json")
-    public ResponseEntity<ArticoliDto> listArtByEan(@PathVariable("barcode") String Barcode)
+    @GetMapping(value = "/cerca/barcode/{ean}", produces = "application/json")
+    public ResponseEntity<ArticoliDto> listArtByEan(@PathVariable("barcode") String Ean)
             throws NotFoundException
     {
-        log.info("****** Otteniamo l'articolo con barcode " + Barcode + " *******");
+        log.info("****** Otteniamo l'articolo con barcode " + Ean + " *******");
 
-        ArticoliDto articolo = articoliService.SelByBarcode(Barcode);
+        ArticoliDto articolo = articoliService.SelByBarcode(Ean);
 
         if (articolo == null)
         {
-            String ErrMsg = String.format("Il barcode %s non è stato trovato!", Barcode);
+            String ErrMsg = String.format("Il barcode %s non è stato trovato!", Ean);
 
             log.warning(ErrMsg);
 
@@ -67,7 +69,7 @@ public class ArticoliController {
 
         List<ArticoliDto> articoli = articoliService.SelByDescrizione(Filter.toUpperCase() + "%");
 
-        if (articoli == null)
+        if (articoli.isEmpty())
         {
             String ErrMsg = String.format("Non è stato trovato alcun articolo avente descrizione %s", Filter);
 
@@ -78,5 +80,9 @@ public class ArticoliController {
         }
 
         return new ResponseEntity<List<ArticoliDto>>(articoli, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Articoli> createArt(@Valid @RequestBody Articoli articolo){
+
     }
 }

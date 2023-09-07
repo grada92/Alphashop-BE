@@ -2,6 +2,10 @@ package io.danielegradassai.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
@@ -22,9 +26,12 @@ public class Articoli  implements Serializable
 
     @Id
     @Column(name = "CODART")
+    @Size(min = 5, max = 20, message = "{Size.Articoli.codArt.Validation}")
+    @NotNull(message = "{NotNull.Articoli.codArt.Validation}")
     private String codArt;
 
     @Column(name = "DESCRIZIONE")
+    @Size(min = 6, max = 80, message = "{Size.Articoli.descrizione.Validation}")
     private String descrizione;
 
     @Column(name = "UM")
@@ -34,9 +41,11 @@ public class Articoli  implements Serializable
     private String codStat;
 
     @Column(name = "PZCART")
+    @Max(value = 99, message = "{Max.Articoli.pzCart.Validation}")
     private Integer pzCart;
 
     @Column(name = "PESONETTO")
+    @Min(value = (long) 0.01, message = "{Min.Articoli.pesoNetto.Validation}")
     private double pesoNetto;
 
     @Column(name = "IDSTATOART")

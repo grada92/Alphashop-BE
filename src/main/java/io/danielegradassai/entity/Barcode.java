@@ -2,6 +2,8 @@ package io.danielegradassai.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
@@ -19,9 +21,12 @@ public class Barcode implements Serializable
 
     @Id
     @Column(name = "BARCODE")
+    @NotNull(message = "{NotNull.Barcode.barcode.Validation}")
+    @Size(min = 8, max = 13, message = "{Size.Barcode.barcode.Validation}")
     private String barcode;
 
     @Column(name = "IDTIPOART")
+    @NotNull(message = "{NotNull.Barcode.idTipoArt.Validation}")
     private String idTipoArt;
 
     @ManyToOne
