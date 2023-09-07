@@ -90,6 +90,12 @@ public class ArticoliServiceImpl implements ArticoliService
     }
 
     @Override
+    public Articoli SelByCodArt2(String codArt) {
+
+        return articoliRepository.findByCodArt(codArt);
+    }
+
+    @Override
     @Transactional
     public void DelArticolo(Articoli articolo)
     {
