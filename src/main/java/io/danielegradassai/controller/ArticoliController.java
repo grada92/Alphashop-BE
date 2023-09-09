@@ -15,6 +15,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -23,23 +24,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/articoli")
 @Log
 @CrossOrigin("http://localhost:4200")
-public class ArticoliController {
+public class ArticoliController
+{
+    @Autowired
+    private ArticoliService articoliService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ArticoliController.class);
+    @Autowired
+    private ResourceBundleMessageSource errMessage;
 
-    private final ArticoliService articoliService;
-    private final ResourceBundleMessageSource resourceBundleMessageSource;
     @GetMapping(value = "/cerca/barcode/{ean}", produces = "application/json")
-    public ResponseEntity<ArticoliDto> listArtByEan(@PathVariable("barcode") String Ean)
+    public ResponseEntity<ArticoliDto> listArtByEan(@PathVariable("ean") String Ean)
             throws NotFoundException
     {
         log.info("****** Otteniamo l'articolo con barcode " + Ean + " *******");
@@ -48,7 +49,7 @@ public class ArticoliController {
 
         if (articolo == null)
         {
-            String ErrMsg = String.format("Il barcode %s non è stato trovato!", Ean);
+            String ErrMsg = String.format("Il barcode %s non � stato trovato!", Ean);
 
             log.warning(ErrMsg);
 
@@ -61,30 +62,37 @@ public class ArticoliController {
 
     }
 
-    @GetMapping(value = "/cerca/codice/{codart}",produces = "application/json")
-    public ResponseEntity<ArticoliDto> listArtByCodArt(@PathVariable("codart") String CodArt) throws NotFoundException{
-        logger.info("****** Otteniamo l'articolo con codice + ", CodArt);
+    @GetMapping(value = "/cerca/codice/{codart}", produces = "application/json")
+    public ResponseEntity<ArticoliDto> listArtByCodArt(@PathVariable("codart") String CodArt)
+            throws NotFoundException
+    {
+        log.info("****** Otteniamo l'articolo con codice " + CodArt + " *******");
 
         ArticoliDto articolo = articoliService.SelByCodArt(CodArt);
 
-        if(articolo == null){
-            String ErrMsg = String.format("L'articolo non è stato trovato", CodArt);
-            logger.warn(ErrMsg);
+        if (articolo == null)
+        {
+            String ErrMsg = String.format("L'articolo con codice %s non � stato trovato!", CodArt);
+
+            log.warning(ErrMsg);
+
             throw new NotFoundException(ErrMsg);
         }
+
         return new ResponseEntity<ArticoliDto>(articolo, HttpStatus.OK);
     }
+
     @GetMapping(value = "/cerca/descrizione/{filter}", produces = "application/json")
     public ResponseEntity<List<ArticoliDto>> listArtByDesc(@PathVariable("filter") String Filter)
             throws NotFoundException
     {
         log.info("****** Otteniamo gli articoli con Descrizione: " + Filter + " *******");
 
-        List<ArticoliDto> articoli = articoliService.SelByDescrizione(Filter.toUpperCase() + "%");
+        List<ArticoliDto> articoli = articoliService.SelByDescrizione(Filter);
 
         if (articoli.isEmpty())
         {
-            String ErrMsg = String.format("Non è stato trovato alcun articolo avente descrizione %s", Filter);
+            String ErrMsg = String.format("Non � stato trovato alcun articolo avente descrizione %s", Filter);
 
             log.warning(ErrMsg);
 
@@ -94,6 +102,7 @@ public class ArticoliController {
 
         return new ResponseEntity<List<ArticoliDto>>(articoli, HttpStatus.OK);
     }
+
     // -------------------------- INSERIMENTO ARTICOLO ---------------------------------
     @PostMapping(value = "/inserisci")
     @SneakyThrows
@@ -104,7 +113,7 @@ public class ArticoliController {
         //controllo validit� dati articolo
         if (bindingResult.hasErrors())
         {
-            String MsgErr = resourceBundleMessageSource.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
+            String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
 
             log.warning(MsgErr);
 
@@ -139,7 +148,7 @@ public class ArticoliController {
 
         if (bindingResult.hasErrors())
         {
-            String MsgErr = resourceBundleMessageSource.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
+            String MsgErr = errMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale());
 
             log.warning(MsgErr);
 

@@ -7,7 +7,6 @@ import io.danielegradassai.dto.ArticoliDto;
 import io.danielegradassai.entity.Articoli;
 import io.danielegradassai.repository.ArticoliRepository;
 import io.danielegradassai.service.ArticoliService;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
 public class ArticoliServiceImpl implements ArticoliService
@@ -41,11 +39,9 @@ public class ArticoliServiceImpl implements ArticoliService
     @Override
     public List<ArticoliDto> SelByDescrizione(String descrizione)
     {
-        List<Articoli> articoli = articoliRepository.SelByDescrizioneLike(descrizione);
+        String filter = "%" + descrizione.toUpperCase() + "%";
 
-        articoli.forEach(e -> e.setIdStatoArt(e.getIdStatoArt().trim()));
-        articoli.forEach(e -> e.setUm(e.getUm().trim()));
-        articoli.forEach(e -> e.setDescrizione(e.getDescrizione().trim()));
+        List<Articoli> articoli = articoliRepository.SelByDescrizioneLike(filter);
 
         List<ArticoliDto> retVal = articoli
                 .stream()
@@ -63,10 +59,6 @@ public class ArticoliServiceImpl implements ArticoliService
         if (articoli != null)
         {
             articoliDto =  modelMapper.map(articoli, ArticoliDto.class);
-
-            articoliDto.setUm(articoliDto.getUm().trim());
-            articoliDto.setIdStatoArt(articoliDto.getIdStatoArt().trim());
-            articoliDto.setDescrizione(articoliDto.getDescrizione().trim());
         }
 
         return articoliDto;
@@ -106,6 +98,10 @@ public class ArticoliServiceImpl implements ArticoliService
     @Transactional
     public void InsArticolo(Articoli articolo)
     {
+        articolo.setDescrizione(articolo.getDescrizione().toUpperCase());
+
         articoliRepository.save(articolo);
     }
+
+
 }

@@ -1,29 +1,22 @@
-#==========================================================
-#= Articoli Web Service - Versione Base
-#==========================================================
-
 server:
   port: 5051
 
 spring:
-  application:
-    name: ArticoliWebService
-  #==========================================================
-  #= PARAMETRI DBMS POSTGRESQL
-  #==========================================================
-  sql:
-    init:
-      mode: always
-      platform: postgres
   datasource:
     password: admin
-    url: jdbc:postgresql://localhost:5432/Alphashop
+    url: jdbc:postgresql://localhost:5432/Alphashop?createDatabaseIfNotExist=true
     username: postgres
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+        show_sql: true
+        format_sql: true
 
+security:
+  issuer: academy
+  duration: 40
+  key: h4mtEFpCS7zF8smc6VF89yV96e35mcpQa85jB6sUh4x7zqFEgbnCkNjMU3cDV58i
+  prefix: Bearer\u0020

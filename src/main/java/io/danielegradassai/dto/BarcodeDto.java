@@ -6,5 +6,5 @@ import lombok.Data;
 public class BarcodeDto {
 
     private String barcode;
-    private String tipo;
+    private String idTipoArt;
 }

@@ -55,6 +55,9 @@ public class Articoli  implements Serializable
     @Column(name = "DATACREAZIONE")
     private Date dataCreaz;
 
+    @Column(name = "IMMAGINE_URL")
+    private String immagineUrl;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "articolo", orphanRemoval = true)
     @JsonManagedReference
     private Set<Barcode> barcode = new HashSet<>();

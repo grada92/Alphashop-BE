@@ -27,5 +27,4 @@ public class Ingredienti implements Serializable
     @PrimaryKeyJoinColumn
     @JsonIgnore
     private Articoli articolo;
-
 }

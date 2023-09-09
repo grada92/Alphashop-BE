@@ -3,41 +3,37 @@ package io.danielegradassai;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.Locale;
 
 @Configuration
 public class MessageConfig {
-    @Bean(name = "validator")
-    public LocalValidatorFactoryBean validator()
-    {
-        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-        bean.setValidationMessageSource(messageSource());
-
-        return bean;
-    }
 
     @Bean
-    public LocaleResolver localeResolver()
-    {
+    public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        //sessionLocaleResolver.setDefaultLocale(LocaleContextHolder.getLocale());
         sessionLocaleResolver.setDefaultLocale(new Locale("it"));
-
         return sessionLocaleResolver;
     }
 
     @Bean
-    public MessageSource messageSource()
-    {
-        ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
-        resource.setBasename("messages");
-        resource.setUseCodeAsDefaultMessage(true);
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages"); // Assicurati che i tuoi file di messaggi siano nella directory "resources" del tuo progetto
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 
+    @Bean
+    public ResourceBundleMessageSource errMessage() {
+        ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
+        resource.setBasename("errMessage"); // Specifica il nome base del file di messaggi degli errori
+        resource.setDefaultEncoding("UTF-8");
         return resource;
     }
 }
+

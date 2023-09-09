@@ -35,4 +35,5 @@ public class Barcode implements Serializable
     @JsonBackReference
     private Articoli articolo;
 
+
 }

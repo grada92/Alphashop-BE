@@ -3,6 +3,7 @@ package io.danielegradassai.service;
 import io.danielegradassai.dto.ArticoliDto;
 import io.danielegradassai.entity.Articoli;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,8 +25,6 @@ public interface ArticoliService {
 
     public void DelArticolo(Articoli articolo);
 
-    public void InsArticolo(Articoli articolo);
-
-
-
+    @Transactional
+    void InsArticolo(Articoli articolo);
 }

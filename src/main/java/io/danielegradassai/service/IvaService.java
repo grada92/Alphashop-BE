@@ -1,4 +1,11 @@
-package io.danielegradassai.service.impl;
+package io.danielegradassai.service;
 
-public interface IvaService {
+import io.danielegradassai.dto.IvaDto;
+
+import java.util.List;
+
+public interface IvaService
+{
+    public List<IvaDto> SelTutti();
 }
+
